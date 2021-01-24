@@ -194,9 +194,7 @@ async def newsLetter():
             await channel.send(removeIt(str(get_body(raw))))
             num += 1
         except TypeError: #If that email doesn't exist yet
-            #Then do nothing and bottle it up
-            None
-        finally: #No matter what wait 24Hours to check again.
+            #Then do nothing and bottle it up and wait till tomorrow
             await asyncio.sleep(86400)
 
 #Run the bot through token
