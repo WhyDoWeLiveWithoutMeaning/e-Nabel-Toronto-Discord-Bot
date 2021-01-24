@@ -9,7 +9,6 @@ import re
 from discord.ext import commands
 
 configuration = json.loads(open('Config.json', 'r').read())
-badWords = open('list.txt', 'r').read().split('\n')
 imap_url = 'imap.gmail.com'
 
 #Setting bot Intents
