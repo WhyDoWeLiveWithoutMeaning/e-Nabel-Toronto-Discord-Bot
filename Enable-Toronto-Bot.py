@@ -29,8 +29,13 @@ def get_body(msg):
 #Remove HTML tags and string Formatters from text
 def removeIt(tag):
     TAG_RE = re.compile(r'<.*?>')
-    data = TAG_RE.sub('', tag)
-    return data.replace('b"', "").replace('"', '').replace("\\r", "").replace("\\n", '').replace("b'", "").replace("'", '')
+    data = TAG_RE.sub(' ', tag)
+    return data.replace('b"', "")\
+    .replace('"', '')\
+    .replace("\\r", "")\
+    .replace("\\n", '')\
+    .replace("b'", "")\
+    .replace("'", '')
 
 
 #config save function
@@ -51,7 +56,9 @@ def check(ctx, roleName):
 #The Help Command
 @client.group(invoke_without_command=True)
 async def help(ctx):
-    embed = discord.Embed(title='Help', description='Use {}help [Command] for more information.\n<> -> Required\n[] -> Optional'.format(configuration["prefix"]))
+    embed = discord.Embed(title='Help', \
+    description='Use {}help [Command] for more information.\n<> -> Required\n[] -> Optional'\
+    .format(configuration["prefix"]))
     if check(ctx, "Leader"):
         embed.add_field(name="**Leader Commands**", value="`Purge`\n`Prefix`")
     await ctx.send(embed=embed)
@@ -77,11 +84,21 @@ async def on_ready():
     client.loop.create_task(newsLetter())
     print('Bot is Online')
 
+#Checks if the message is from itself and if so Ignore it
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
     await client.process_commands(message)
+
+#Gives ability to run command if message was edited
+@client.event
+async def on_message_edit(before, after):
+    if after.author == client.user:
+        return
+    await client.process_commands(after)
+
+
 #Every time a user joins
 @client.event
 async def on_member_join(member):
@@ -93,7 +110,7 @@ async def on_member_join(member):
 async def clear(ctx, numberOfMessages=None, user=None):
     #Check is the user is a Leader
     #If so continue
-    if check(ctx, "Leader"):
+    if check(ctx, "Team Lead"):
 
         #Check if the number is specified.
         #If so continue
